@@ -6,17 +6,28 @@
 <title>身體偵探社</title>
 <style>
 :root {
-  --bg: #090b14;
-  --panel: rgba(16, 20, 33, 0.88);
-  --panel-2: rgba(28, 34, 53, 0.90);
-  --border: rgba(255,255,255,0.08);
-  --text: #f4f7fb;
-  --muted: #b8c0d1;
-  --accent: #7cdb7a;
-  --accent-2: #8f7dff;
-  --danger: #ef6b6b;
-  --warning: #ffcb6b;
-  --shadow: 0 20px 60px rgba(0,0,0,.45);
+ .intro-card {
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 18px;
+  margin: 18px 0 24px;
+  text-align: left;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+.intro-card h2 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 22px;
+  color: #ffffff;
+}
+
+.intro-card p {
+  margin: 0;
+  line-height: 1.9;
+  font-size: 17px;
+  color: #d1d5db;
 }
 
 * { box-sizing: border-box; }
@@ -604,16 +615,25 @@ button {
 </style>
 </head>
 <body>
-<div id="cover">
-  <div class="cover-glow"></div>
-  <div class="cover-card">
-    <div class="kicker">🕵️ 健康知識偵探遊戲</div>
-    <div class="cover-title">身體偵探社</div>
-    <div class="cover-subtitle">BODY DETECTIVE</div>
-    <p class="cover-desc">把身體機制化成案件，從線索、器官對話到推理選擇，一步一步拆開真相。</p>
-    <button class="primary-btn" id="startBtn">開始調查</button>
+<div class="container">
+  <h1>🕵️ 身體偵探社</h1>
+
+  <div class="intro-card" id="introCard">
+    <h2>設計理念</h2>
+    <p>
+      《身體偵探社》是一款以健康知識為主題的互動推理遊戲，
+      將原本較抽象的身體機制轉化成「偵探辦案」的形式，
+      讓玩家透過觀察線索、分析生活習慣、詢問器官對話，
+      逐步推理出身體不適的真正原因。
+
+      遊戲希望讓使用者在解謎過程中自然理解常見健康問題背後的成因，
+      而不是死背知識。
+
+      整體設計以手機優先、純前端方式呈現，
+      搭配懸疑風格畫面、劇情式關卡與進度回饋，
+      提升沉浸感與學習動機。
+    </p>
   </div>
-</div>
 
 <div id="app" class="hidden">
   <div class="topbar">
