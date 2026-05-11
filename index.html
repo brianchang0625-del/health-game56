@@ -6,28 +6,17 @@
 <title>身體偵探社</title>
 <style>
 :root {
- .intro-card {
-  background: rgba(15, 23, 42, 0.92);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 18px;
-  padding: 18px;
-  margin: 18px 0 24px;
-  text-align: left;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-}
-
-.intro-card h2 {
-  margin-top: 0;
-  margin-bottom: 12px;
-  font-size: 22px;
-  color: #ffffff;
-}
-
-.intro-card p {
-  margin: 0;
-  line-height: 1.9;
-  font-size: 17px;
-  color: #d1d5db;
+  --bg: #090b14;
+  --panel: rgba(16, 20, 33, 0.88);
+  --panel-2: rgba(28, 34, 53, 0.90);
+  --border: rgba(255,255,255,0.08);
+  --text: #f4f7fb;
+  --muted: #b8c0d1;
+  --accent: #7cdb7a;
+  --accent-2: #8f7dff;
+  --danger: #ef6b6b;
+  --warning: #ffcb6b;
+  --shadow: 0 20px 60px rgba(0,0,0,.45);
 }
 
 * { box-sizing: border-box; }
@@ -594,6 +583,37 @@ button {
     flex: 1 1 100%;
   }
 }
+
+/* 音量切換按鈕 */
+#volumeBtn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(20, 24, 40, 0.88);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: #f4f7fb;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  backdrop-filter: blur(8px);
+  transition: background 0.18s, border-color 0.18s, transform 0.12s;
+  line-height: 1;
+}
+#volumeBtn:hover {
+  background: rgba(40, 48, 72, 0.96);
+  border-color: rgba(124,219,122,0.35);
+  transform: scale(1.08);
+}
+#volumeBtn.muted {
+  opacity: 0.55;
+}
   .card, .case-card {
   color: #e5e7eb !important;
 }
@@ -615,24 +635,18 @@ button {
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>🕵️ 身體偵探社</h1>
-  <div class="intro-card">
-    <h2>設計理念</h2>
-    <p>
-      《身體偵探社》是一款以健康知識為主題的互動推理遊戲，
-      將原本較抽象的身體機制轉化成「偵探辦案」的形式，
-      讓玩家透過觀察線索、分析生活習慣、詢問器官對話，
-      逐步推理出身體不適的真正原因。
+<button id="volumeBtn" title="切換音效" aria-label="切換音效">🔊</button>
 
-      遊戲希望讓使用者在解謎過程中自然理解常見健康問題背後的成因，
-      而不是死背知識。
-
-      整體設計以手機優先、純前端方式呈現，
-      搭配懸疑風格畫面、劇情式關卡與進度回饋，
-      提升沉浸感與學習動機。
-    </p>
+<div id="cover">
+  <div class="cover-glow"></div>
+  <div class="cover-card">
+    <div class="kicker">🕵️ 健康知識偵探遊戲</div>
+    <div class="cover-title">身體偵探社</div>
+    <div class="cover-subtitle">BODY DETECTIVE</div>
+    <p class="cover-desc">把身體機制化成案件，從線索、器官對話到推理選擇，一步一步拆開真相。</p>
+    <button class="primary-btn" id="startBtn">開始調查</button>
   </div>
+</div>
 
 <div id="app" class="hidden">
   <div class="topbar">
@@ -1441,6 +1455,238 @@ function typeText(target, text, speed = 18) {
 }
 
 updateStats();
+
+/* ===== 音效系統（Web Audio API 合成，無需外部音效檔）===== */
+(function () {
+  let audioCtx = null;
+  let isMuted = false;
+  let bgmMasterGain = null;
+  let bgmLoopId = null;
+  let bgmNoiseSrc = null;
+  let bgmPlaying = false;
+
+  const volumeBtn = document.getElementById('volumeBtn');
+
+  function getCtx() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    return audioCtx;
+  }
+
+  /* ---------- BGM：懸疑偵探電影風格 ---------- */
+  function startBGM() {
+    if (bgmPlaying) return;
+    bgmPlaying = true;
+
+    const ctx = getCtx();
+    bgmMasterGain = ctx.createGain();
+    bgmMasterGain.gain.setValueAtTime(isMuted ? 0 : 0.22, ctx.currentTime);
+    bgmMasterGain.connect(ctx.destination);
+
+    // === 層 1：緩慢呼吸的低頻 drone ===
+    // 用兩個輕微失諧的正弦波產生「拍頻」效果，聽起來像在「搏動呼吸」
+    function makeDrone(baseFreq) {
+      [baseFreq, baseFreq * 1.004].forEach((f, i) => {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(f, ctx.currentTime);
+        g.gain.setValueAtTime(0, ctx.currentTime);
+        g.gain.linearRampToValueAtTime(i === 0 ? 0.28 : 0.22, ctx.currentTime + 3.5);
+        osc.connect(g);
+        g.connect(bgmMasterGain);
+        osc.start();
+        bgmNoiseSrc = osc; // 存一個供停止用（簡化）
+      });
+    }
+    makeDrone(55); // A1，深沉低頻
+
+    // === 層 2：慢速下行「鬼音」長音調 ===
+    // 每隔一段時間，悄悄滑出一個高頻 sine，再慢慢消失
+    const eerieNotes = [880, 830.6, 783.99, 739.99, 698.46, 659.25];
+    let eerieIdx = 0;
+    function playEerie(t) {
+      const freq = eerieNotes[eerieIdx % eerieNotes.length];
+      eerieIdx++;
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, t);
+      osc.frequency.linearRampToValueAtTime(freq * 0.97, t + 7);
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.07, t + 1.8);
+      g.gain.linearRampToValueAtTime(0, t + 7);
+      osc.connect(g);
+      g.connect(bgmMasterGain);
+      osc.start(t);
+      osc.stop(t + 7.5);
+    }
+
+    // === 層 3：規律心跳低鼓聲（雙擊 pattern：BUM-bum） ===
+    function playHeartbeat(t) {
+      // 強拍
+      [[t, 0.38, 58], [t + 0.32, 0.22, 50]].forEach(([st, gain, freq]) => {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, st);
+        osc.frequency.exponentialRampToValueAtTime(30, st + 0.35);
+        g.gain.setValueAtTime(gain, st);
+        g.gain.exponentialRampToValueAtTime(0.001, st + 0.38);
+        osc.connect(g);
+        g.connect(bgmMasterGain);
+        osc.start(st);
+        osc.stop(st + 0.42);
+      });
+    }
+
+    // === 層 4：偶發的撥弦音（鋼琴風格短音符）===
+    const pluckNotes = [233.08, 246.94, 261.63, 277.18, 220, 207.65];
+    function playPluck(t) {
+      const freq = pluckNotes[Math.floor(Math.random() * pluckNotes.length)];
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, t);
+      g.gain.setValueAtTime(0.18, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 1.6);
+      osc.connect(g);
+      g.connect(bgmMasterGain);
+      osc.start(t);
+      osc.stop(t + 1.7);
+    }
+
+    // === 排程循環 ===
+    const BPM = 52; // 慢速，緊張感
+    const beat = 60 / BPM; // ~1.154 秒/拍
+    let t = ctx.currentTime + 0.3;
+    let barCount = 0;
+
+    bgmLoopId = setInterval(() => {
+      if (!bgmPlaying) { clearInterval(bgmLoopId); return; }
+
+      // 心跳：每兩拍一次
+      if (barCount % 2 === 0) playHeartbeat(t);
+
+      // 鬼音：每 6 拍一次，緩慢輪轉
+      if (barCount % 6 === 0) playEerie(t);
+
+      // 撥弦：隨機出現，製造不確定感
+      if (Math.random() < 0.28) playPluck(t + Math.random() * beat * 0.8);
+
+      t += beat;
+      barCount++;
+    }, beat * 1000);
+  }
+
+  /* ---------- 成功音效 ---------- */
+  function playSuccess() {
+    if (isMuted) return;
+    const ctx = getCtx();
+    const master = ctx.createGain();
+    master.gain.setValueAtTime(0.45, ctx.currentTime);
+    master.connect(ctx.destination);
+
+    const notes = [523.25, 659.25, 783.99, 1046.5];
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      const t = ctx.currentTime + i * 0.12;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.5, t + 0.04);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.55);
+      osc.connect(g);
+      g.connect(master);
+      osc.start(t);
+      osc.stop(t + 0.6);
+    });
+
+    const shimmer = ctx.createOscillator();
+    const sg = ctx.createGain();
+    shimmer.type = 'sine';
+    shimmer.frequency.setValueAtTime(2093, ctx.currentTime + 0.38);
+    sg.gain.setValueAtTime(0.18, ctx.currentTime + 0.38);
+    sg.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.85);
+    shimmer.connect(sg);
+    sg.connect(master);
+    shimmer.start(ctx.currentTime + 0.38);
+    shimmer.stop(ctx.currentTime + 0.9);
+  }
+
+  /* ---------- 失敗音效 ---------- */
+  function playFail() {
+    if (isMuted) return;
+    const ctx = getCtx();
+    const master = ctx.createGain();
+    master.gain.setValueAtTime(0.38, ctx.currentTime);
+    master.connect(ctx.destination);
+
+    const notes = [330, 277.2, 220];
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.13);
+      const t = ctx.currentTime + i * 0.13;
+      g.gain.setValueAtTime(0.35, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
+      osc.connect(g);
+      g.connect(master);
+      osc.start(t);
+      osc.stop(t + 0.4);
+    });
+
+    const buzz = ctx.createOscillator();
+    const bg = ctx.createGain();
+    buzz.type = 'triangle';
+    buzz.frequency.setValueAtTime(110, ctx.currentTime + 0.05);
+    buzz.frequency.linearRampToValueAtTime(82.4, ctx.currentTime + 0.5);
+    bg.gain.setValueAtTime(0.28, ctx.currentTime + 0.05);
+    bg.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.55);
+    buzz.connect(bg);
+    bg.connect(master);
+    buzz.start(ctx.currentTime + 0.05);
+    buzz.stop(ctx.currentTime + 0.6);
+  }
+
+  /* ---------- 音量切換 ---------- */
+  volumeBtn.addEventListener('click', () => {
+    isMuted = !isMuted;
+    volumeBtn.textContent = isMuted ? '🔇' : '🔊';
+    volumeBtn.classList.toggle('muted', isMuted);
+    volumeBtn.title = isMuted ? '開啟音效' : '關閉音效';
+
+    if (bgmMasterGain && audioCtx) {
+      bgmMasterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+      bgmMasterGain.gain.linearRampToValueAtTime(
+        isMuted ? 0 : 0.18,
+        audioCtx.currentTime + 0.3
+      );
+    }
+  });
+
+  /* ---------- 點擊封面「開始調查」→ 啟動 BGM ---------- */
+  document.getElementById('startBtn').addEventListener('click', () => {
+    try { startBGM(); } catch(e) { console.warn('BGM 啟動失敗', e); }
+  });
+
+  /* ---------- 監聽答題結果，播放對應音效 ---------- */
+  const resultBoxEl = document.getElementById('resultBox');
+  const observer = new MutationObserver(() => {
+    const text = resultBoxEl.textContent;
+    if (text.startsWith('✅')) {
+      playSuccess();
+    } else if (text.startsWith('❌')) {
+      playFail();
+    }
+  });
+  observer.observe(resultBoxEl, { childList: true, characterData: true, subtree: true });
+
+})();
+/* ===== 音效系統結束 ===== */
 </script>
 </body>
 </html>
