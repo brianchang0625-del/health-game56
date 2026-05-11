@@ -208,6 +208,22 @@ button {
   margin-bottom: 8px;
 }
 
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), #d5ff86, #ffcb6b);
+  background-size: 200% 100%;
+  border-radius: 999px;
+  transition: width .45s ease;
+  animation: progressShimmer 3s linear infinite;
+}
+
+@keyframes progressShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 .progress-bar {
   width: 100%;
   height: 12px;
@@ -217,13 +233,7 @@ button {
   border: 1px solid rgba(255,255,255,.08);
 }
 
-.progress-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, var(--accent), #d5ff86);
-  border-radius: 999px;
-  transition: width .45s ease;
-}
+
 
 .screen {
   display: none;
@@ -276,6 +286,27 @@ button {
   transform: translateY(0);
 }
 
+
+.case-accent-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  border-radius: 20px 20px 0 0;
+  background: var(--case-accent, #7cdb7a);
+  opacity: 0.75;
+}
+
+.case-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  font-size: 22px;
+  border: 1px solid;
+  margin-bottom: 8px;
+}
 .case-num {
   font-size: 12px;
   color: var(--muted);
@@ -436,7 +467,45 @@ button {
   gap: 10px;
 }
 
- .option-btn {
+
+.option-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.opt-key-badge {
+  flex: 0 0 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 2px;
+  flex-shrink: 0;
+  letter-spacing: 0;
+}
+
+.opt-text {
+  flex: 1;
+  text-align: left;
+}
+
+.option-btn.correct .opt-key-badge {
+  background: rgba(124,219,122,0.32);
+  border-color: rgba(124,219,122,0.6);
+}
+
+.option-btn.wrong .opt-key-badge {
+  background: rgba(239,107,107,0.32);
+  border-color: rgba(239,107,107,0.6);
+}
+
+.option-btn-base-override {
   width: 100%;
   text-align: left;
   padding: 15px 15px;
@@ -584,6 +653,133 @@ button {
   }
 }
 
+
+.cover-icon-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.cover-magnify {
+  width: 90px;
+  height: 90px;
+  filter: drop-shadow(0 0 18px rgba(124,219,122,0.35));
+  animation: rotateMagnify 14s linear infinite;
+}
+
+@keyframes rotateMagnify {
+  0% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+  100% { transform: rotate(-4deg); }
+}
+
+
+.body-diagram-row {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.body-diagram-svg {
+  flex: 0 0 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.body-svg {
+  width: 100px;
+  height: 160px;
+  filter: drop-shadow(0 0 12px rgba(124,219,122,0.12));
+  animation: bodyPulse 3.5s ease-in-out infinite;
+}
+
+@keyframes bodyPulse {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(124,219,122,0.10)); }
+  50% { filter: drop-shadow(0 0 18px rgba(124,219,122,0.22)); }
+}
+
+.organ-heart {
+  animation: heartbeat 1.2s ease-in-out infinite;
+  transform-origin: 90px 112px;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  30% { transform: scale(1.15); }
+  60% { transform: scale(1.08); }
+}
+
+.body-diagram-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: .06em;
+  text-align: center;
+}
+
+.body-diagram-clues-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@media (max-width: 500px) {
+  .body-diagram-row {
+    flex-direction: column;
+  }
+  .body-diagram-svg {
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    flex: unset;
+    width: 100%;
+  }
+  .body-svg {
+    width: 60px;
+    height: 96px;
+  }
+}
+
+
+.ending-trophy {
+  font-size: 56px;
+  text-align: center;
+  margin-bottom: 8px;
+  animation: trophyBounce 1.2s cubic-bezier(.22,.61,.36,1) both;
+}
+
+@keyframes trophyBounce {
+  0% { transform: scale(0) rotate(-10deg); opacity:0; }
+  70% { transform: scale(1.15) rotate(4deg); opacity:1; }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+
+.clue-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.clue-btn-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.clue-btn.correct {
+  background: linear-gradient(180deg, rgba(35,82,48,.98), rgba(21,53,32,.98)) !important;
+  border-color: rgba(124,219,122,.45) !important;
+}
+
+
+.brand-icon {
+  font-size: 22px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
 /* 音量切換按鈕 */
 #volumeBtn {
   position: fixed;
@@ -603,7 +799,7 @@ button {
   cursor: pointer;
   box-shadow: 0 4px 16px rgba(0,0,0,0.35);
   backdrop-filter: blur(8px);
-  transition: background 0.18s, border-color 0.18s, transform 0.12s;
+  transition: background 0.18s, border-color 0.18s, transform 0.12s, top 0.25s;
   line-height: 1;
 }
 #volumeBtn:hover {
@@ -613,6 +809,108 @@ button {
 }
 #volumeBtn.muted {
   opacity: 0.55;
+}
+/* 案件選單頁面：音量鍵下移，設計理念按鈕出現 */
+body.on-menu-screen #volumeBtn {
+  top: 68px;
+}
+
+/* 設計理念按鈕 */
+#designBtn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 22px;
+  background: rgba(20, 24, 40, 0.88);
+  border: 1px solid rgba(143,125,255,0.35);
+  color: var(--accent-2);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  backdrop-filter: blur(8px);
+  transition: background 0.18s, border-color 0.18s, transform 0.12s;
+  white-space: nowrap;
+}
+#designBtn:hover {
+  background: rgba(40, 48, 72, 0.96);
+  border-color: rgba(143,125,255,0.7);
+  transform: scale(1.05);
+}
+body.on-menu-screen #designBtn {
+  display: flex;
+}
+
+/* 設計理念 Modal */
+#designModal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s;
+}
+#designModal.open {
+  opacity: 1;
+  pointer-events: all;
+}
+#designModalBox {
+  background: rgba(18, 22, 38, 0.97);
+  border: 1px solid rgba(143,125,255,0.28);
+  border-radius: 20px;
+  max-width: 480px;
+  width: 100%;
+  padding: 32px 28px 28px;
+  box-shadow: 0 24px 72px rgba(0,0,0,0.6);
+  position: relative;
+}
+#designModalBox h3 {
+  margin: 0 0 16px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent-2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#designModalBox p {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.85;
+  color: var(--muted);
+}
+#designModalClose {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--muted);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+#designModalClose:hover {
+  background: rgba(255,255,255,0.14);
 }
   .card, .case-card {
   color: #e5e7eb !important;
@@ -636,10 +934,28 @@ button {
 </head>
 <body>
 <button id="volumeBtn" title="切換音效" aria-label="切換音效">🔊</button>
+<button id="designBtn" title="設計理念">💡 設計理念</button>
+
+<!-- 設計理念 Modal -->
+<div id="designModal" role="dialog" aria-modal="true" aria-labelledby="designModalTitle">
+  <div id="designModalBox">
+    <button id="designModalClose" aria-label="關閉">✕</button>
+    <h3 id="designModalTitle">💡 設計理念</h3>
+    <p>《身體偵探社》是一款以健康知識為主題的互動推理遊戲，將原本較抽象的身體機制轉化成「偵探辦案」的形式，讓玩家透過觀察線索、分析生活習慣、詢問器官對話，逐步推理出身體不適的真正原因。<br><br>遊戲希望讓使用者在解謎過程中自然理解常見健康問題背後的成因，而不是死背知識。整體設計以手機優先、純前端方式呈現，搭配懸疑風格畫面、劇情式關卡與進度回饋，提升沉浸感與學習動機。</p>
+  </div>
+</div>
 
 <div id="cover">
   <div class="cover-glow"></div>
   <div class="cover-card">
+    <div class="cover-icon-wrap">
+      <svg class="cover-magnify" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="36" stroke="#7cdb7a" stroke-width="5" stroke-dasharray="8 4"/>
+        <circle cx="50" cy="50" r="22" fill="rgba(124,219,122,0.10)" stroke="rgba(124,219,122,0.4)" stroke-width="2"/>
+        <line x1="78" y1="78" x2="108" y2="108" stroke="#a0aacc" stroke-width="7" stroke-linecap="round"/>
+        <text x="50" y="57" text-anchor="middle" font-size="24" fill="#7cdb7a">🫀</text>
+      </svg>
+    </div>
     <div class="kicker">🕵️ 健康知識偵探遊戲</div>
     <div class="cover-title">身體偵探社</div>
     <div class="cover-subtitle">BODY DETECTIVE</div>
@@ -652,7 +968,7 @@ button {
   <div class="topbar">
     <div class="brand-row">
       <div class="brand">
-        <h1>身體偵探社</h1>
+        <h1><span class="brand-icon">🔬</span>身體偵探社</h1>
         <p>主頁面顯示案件進度，破案後會解鎖完整回饋。<br>請從案件卡片開始調查，再進入推理與結案。</p>
       </div>
       <div class="case-meta">
@@ -699,14 +1015,52 @@ button {
 
         <div id="investigationStage" class="stage">
           <div class="tool-label">線索板</div>
+
+          <div class="body-diagram-row">
+            <div class="body-diagram-svg" id="bodyDiagram" aria-label="身體示意圖">
+              <svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg" class="body-svg">
+                <!-- 頭 -->
+                <circle cx="100" cy="40" r="30" fill="rgba(255,255,255,0.06)" stroke="rgba(200,210,255,0.3)" stroke-width="1.5"/>
+                <text x="100" y="46" text-anchor="middle" font-size="20">🧑</text>
+                <!-- 脖子 -->
+                <rect x="92" y="68" width="16" height="16" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(200,210,255,0.2)" stroke-width="1"/>
+                <!-- 軀幹 -->
+                <rect x="62" y="84" width="76" height="110" rx="16" fill="rgba(255,255,255,0.04)" stroke="rgba(200,210,255,0.22)" stroke-width="1.5"/>
+                <!-- 心臟 -->
+                <circle cx="90" cy="112" r="11" class="organ-heart" fill="rgba(255,100,150,0.18)" stroke="rgba(255,100,150,0.5)" stroke-width="1.5"/>
+                <text x="90" y="117" text-anchor="middle" font-size="13">♥</text>
+                <!-- 肺 -->
+                <ellipse cx="78" cy="130" rx="9" ry="13" fill="rgba(130,180,255,0.12)" stroke="rgba(130,180,255,0.35)" stroke-width="1"/>
+                <ellipse cx="122" cy="130" rx="9" ry="13" fill="rgba(130,180,255,0.12)" stroke="rgba(130,180,255,0.35)" stroke-width="1"/>
+                <!-- 胃 -->
+                <ellipse cx="105" cy="158" rx="13" ry="10" fill="rgba(255,200,100,0.13)" stroke="rgba(255,200,100,0.38)" stroke-width="1"/>
+                <text x="105" y="162" text-anchor="middle" font-size="11">胃</text>
+                <!-- 腸 -->
+                <ellipse cx="100" cy="178" rx="18" ry="10" fill="rgba(180,140,100,0.12)" stroke="rgba(180,140,100,0.3)" stroke-width="1"/>
+                <text x="100" y="182" text-anchor="middle" font-size="9">腸</text>
+                <!-- 手臂 -->
+                <rect x="36" y="88" width="22" height="72" rx="10" fill="rgba(255,255,255,0.04)" stroke="rgba(200,210,255,0.2)" stroke-width="1"/>
+                <rect x="142" y="88" width="22" height="72" rx="10" fill="rgba(255,255,255,0.04)" stroke="rgba(200,210,255,0.2)" stroke-width="1"/>
+                <!-- 腿 -->
+                <rect x="70" y="196" width="24" height="90" rx="10" fill="rgba(255,255,255,0.04)" stroke="rgba(200,210,255,0.2)" stroke-width="1"/>
+                <rect x="106" y="196" width="24" height="90" rx="10" fill="rgba(255,255,255,0.04)" stroke="rgba(200,210,255,0.2)" stroke-width="1"/>
+                <!-- 腳 -->
+                <ellipse cx="82" cy="290" rx="14" ry="7" fill="rgba(255,255,255,0.05)" stroke="rgba(200,210,255,0.2)" stroke-width="1"/>
+                <ellipse cx="118" cy="290" rx="14" ry="7" fill="rgba(255,255,255,0.05)" stroke="rgba(200,210,255,0.2)" stroke-width="1"/>
+              </svg>
+              <div class="body-diagram-label">身體機制示意圖</div>
+            </div>
+            <div class="body-diagram-clues-col" style="flex:1;">
           <div id="clueBoard" class="clue-board empty">請先點選生活、環境、器官線索。</div>
+            </div>
+          </div>
 
           <div class="action-row" style="margin-top: 14px;">
-            <button class="secondary-btn" id="lifeBtn">📄 生活線索</button>
-            <button class="secondary-btn" id="envBtn">🌡️ 環境線索</button>
+            <button class="secondary-btn clue-btn" id="lifeBtn"><span class="clue-btn-icon">📄</span>生活線索</button>
+            <button class="secondary-btn clue-btn" id="envBtn"><span class="clue-btn-icon">🌡️</span>環境線索</button>
           </div>
           <div class="action-row">
-            <button class="secondary-btn" id="organBtn">🧠 器官對話</button>
+            <button class="secondary-btn clue-btn" id="organBtn"><span class="clue-btn-icon">🧠</span>器官對話</button>
             <button class="secondary-btn" id="deduceBtn">進入推理</button>
           </div>
 
@@ -735,6 +1089,7 @@ button {
 
 <div id="ending" class="ending hidden">
   <div class="ending-card">
+    <div class="ending-trophy">🏆</div>
     <h2>全部案件破關</h2>
     <p id="endingText"></p>
     <div class="summary-grid">
@@ -763,6 +1118,18 @@ button {
 </div>
 
 <script>
+const caseIcons = [
+  {icon:"🧠", color:"#7cdb7a"},
+  {icon:"⚡", color:"#ffcb6b"},
+  {icon:"💨", color:"#ff9999"},
+  {icon:"💓", color:"#ff6b9d"},
+  {icon:"🦴", color:"#a0c4ff"},
+  {icon:"🔥", color:"#ff8c42"},
+  {icon:"😮", color:"#c4b5fd"},
+  {icon:"🛡️", color:"#6ee7b7"},
+  {icon:"💪", color:"#fbbf24"},
+  {icon:"👁️", color:"#67e8f9"}
+];
 const cases = [
   {
     "title": "消失的專注力",
@@ -1216,7 +1583,11 @@ function renderMenu() {
     const done = state.solved.has(i);
     const preview = c.story.split('\n').slice(0, 2).join(' ').slice(0, 56) + (c.story.length > 56 ? '…' : '');
 
+    const ic = caseIcons[i] || {icon:"🔍", color:"#7cdb7a"};
+    card.style.setProperty('--case-accent', ic.color);
     card.innerHTML = `
+      <div class="case-accent-bar"></div>
+      <div class="case-icon-badge" style="background:${ic.color}22;border-color:${ic.color}44;">${ic.icon}</div>
       <div class="case-num">案件 ${String(i + 1).padStart(2, '0')}</div>
       <div class="case-title">${c.title}</div>
       <p class="case-preview">${preview}</p>
@@ -1233,6 +1604,7 @@ function showMenu() {
   menuScreen.classList.add('active');
   caseScreen.classList.remove('active');
   ending.classList.add('hidden');
+  document.body.classList.add('on-menu-screen');
   renderMenu();
 }
 
@@ -1255,13 +1627,17 @@ async function openCase(index) {
   menuScreen.classList.remove('active');
   caseScreen.classList.add('active');
   ending.classList.add('hidden');
+  document.body.classList.remove('on-menu-screen');
 
   storyStage.classList.add('active');
   investigationStage.classList.remove('active');
   deductionStage.classList.remove('active');
 
   const c = cases[index];
-  caseTitle.textContent = `案件 ${String(index + 1).padStart(2, '0')}｜${c.title}`;
+  const ic = caseIcons[index] || {icon:"🔍", color:"#7cdb7a"};
+  caseTitle.textContent = `${ic.icon} 案件 ${String(index + 1).padStart(2, '0')}｜${c.title}`;
+  // 更新案件主題顏色
+  document.documentElement.style.setProperty('--case-live-color', ic.color);
   caseSubtitle.textContent = '先讀完案件敘述，再進入調查。每一個字都可能是線索。';
   storyBox.classList.add('typing');
   storyBox.textContent = '';
@@ -1363,7 +1739,7 @@ function showDeduction() {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'option-btn';
-    btn.innerHTML = `<strong>${opt.key}.</strong> ${opt.text}`;
+    btn.innerHTML = `<span class="opt-key-badge">${opt.key}</span><span class="opt-text">${opt.text}</span>`;
     btn.addEventListener('click', () => chooseOption(btn, opt));
     optionGrid.appendChild(btn);
   });
@@ -1474,106 +1850,121 @@ updateStats();
     return audioCtx;
   }
 
-  /* ---------- BGM：懸疑偵探電影風格 ---------- */
+  /* ---------- BGM：輕鬆懸疑氛圍 ---------- */
   function startBGM() {
     if (bgmPlaying) return;
     bgmPlaying = true;
 
     const ctx = getCtx();
     bgmMasterGain = ctx.createGain();
-    bgmMasterGain.gain.setValueAtTime(isMuted ? 0 : 0.22, ctx.currentTime);
+    bgmMasterGain.gain.setValueAtTime(isMuted ? 0 : 0.42, ctx.currentTime);
     bgmMasterGain.connect(ctx.destination);
 
-    // === 層 1：緩慢呼吸的低頻 drone ===
-    // 用兩個輕微失諧的正弦波產生「拍頻」效果，聽起來像在「搏動呼吸」
-    function makeDrone(baseFreq) {
-      [baseFreq, baseFreq * 1.004].forEach((f, i) => {
-        const osc = ctx.createOscillator();
-        const g = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(f, ctx.currentTime);
-        g.gain.setValueAtTime(0, ctx.currentTime);
-        g.gain.linearRampToValueAtTime(i === 0 ? 0.28 : 0.22, ctx.currentTime + 3.5);
-        osc.connect(g);
-        g.connect(bgmMasterGain);
-        osc.start();
-        bgmNoiseSrc = osc; // 存一個供停止用（簡化）
-      });
-    }
-    makeDrone(55); // A1，深沉低頻
-
-    // === 層 2：慢速下行「鬼音」長音調 ===
-    // 每隔一段時間，悄悄滑出一個高頻 sine，再慢慢消失
-    const eerieNotes = [880, 830.6, 783.99, 739.99, 698.46, 659.25];
-    let eerieIdx = 0;
-    function playEerie(t) {
-      const freq = eerieNotes[eerieIdx % eerieNotes.length];
-      eerieIdx++;
-      const osc = ctx.createOscillator();
+    // === 層 1：緩慢低頻底音墊（A1 + E2，形成懸疑感，不刺耳）===
+    function makePad(freq, vol) {
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
       const g = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, t);
-      osc.frequency.linearRampToValueAtTime(freq * 0.97, t + 7);
-      g.gain.setValueAtTime(0, t);
-      g.gain.linearRampToValueAtTime(0.07, t + 1.8);
-      g.gain.linearRampToValueAtTime(0, t + 7);
-      osc.connect(g);
+      // 輕微失諧製造溫暖拍頻
+      osc1.type = 'sine';
+      osc2.type = 'sine';
+      osc1.frequency.setValueAtTime(freq, ctx.currentTime);
+      osc2.frequency.setValueAtTime(freq * 1.003, ctx.currentTime);
+      g.gain.setValueAtTime(0, ctx.currentTime);
+      g.gain.linearRampToValueAtTime(vol, ctx.currentTime + 4);
+      osc1.connect(g);
+      osc2.connect(g);
       g.connect(bgmMasterGain);
-      osc.start(t);
-      osc.stop(t + 7.5);
+      osc1.start();
+      osc2.start();
     }
+    makePad(55, 0.22);   // A1
+    makePad(82.4, 0.12); // E2（完美五度，神秘但不緊張）
 
-    // === 層 3：規律心跳低鼓聲（雙擊 pattern：BUM-bum） ===
-    function playHeartbeat(t) {
-      // 強拍
-      [[t, 0.38, 58], [t + 0.32, 0.22, 50]].forEach(([st, gain, freq]) => {
+    // === 層 2：中頻柔和和聲墊（每 8 秒緩慢切換）===
+    // 用低頻端的 D3/A3 做柔和氛圍，避免高頻刺耳
+    const padChords = [
+      [146.83, 196.00, 220.00], // D3, G3, A3
+      [130.81, 174.61, 220.00], // C3, F3, A3
+      [146.83, 185.00, 220.00], // D3, F#3, A3
+      [123.47, 164.81, 196.00], // B2, E3, G3
+    ];
+    let chordIdx = 0;
+    let padNodes = [];
+    function playPadChord(t) {
+      // 淡出舊音
+      padNodes.forEach(({ g, oscs }) => {
+        g.gain.setTargetAtTime(0, t, 1.5);
+        oscs.forEach(o => { try { o.stop(t + 6); } catch(e){} });
+      });
+      padNodes = [];
+      // 淡入新和弦
+      const chord = padChords[chordIdx % padChords.length];
+      chordIdx++;
+      chord.forEach(freq => {
         const osc = ctx.createOscillator();
-        const g = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, st);
-        osc.frequency.exponentialRampToValueAtTime(30, st + 0.35);
-        g.gain.setValueAtTime(gain, st);
-        g.gain.exponentialRampToValueAtTime(0.001, st + 0.38);
-        osc.connect(g);
-        g.connect(bgmMasterGain);
-        osc.start(st);
-        osc.stop(st + 0.42);
+        const g2 = ctx.createGain();
+        osc.type = 'triangle'; // 比 sine 稍微豐富但仍柔和
+        osc.frequency.setValueAtTime(freq, t);
+        g2.gain.setValueAtTime(0, t);
+        g2.gain.linearRampToValueAtTime(0.055, t + 2.5);
+        osc.connect(g2);
+        g2.connect(bgmMasterGain);
+        osc.start(t);
+        padNodes.push({ g: g2, oscs: [osc] });
       });
     }
+    playPadChord(ctx.currentTime + 1);
 
-    // === 層 4：偶發的撥弦音（鋼琴風格短音符）===
-    const pluckNotes = [233.08, 246.94, 261.63, 277.18, 220, 207.65];
+    // === 層 3：偶發的柔和撥弦音（中低音域，輕鬆感）===
+    // 音符限定在 C3–A3 範圍，避免高頻刺激
+    const pluckNotes = [130.81, 146.83, 164.81, 174.61, 196.00, 220.00, 246.94];
     function playPluck(t) {
       const freq = pluckNotes[Math.floor(Math.random() * pluckNotes.length)];
       const osc = ctx.createOscillator();
       const g = ctx.createGain();
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(freq, t);
-      g.gain.setValueAtTime(0.18, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 1.6);
+      g.gain.setValueAtTime(0.13, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 2.2);
       osc.connect(g);
       g.connect(bgmMasterGain);
       osc.start(t);
-      osc.stop(t + 1.7);
+      osc.stop(t + 2.5);
+    }
+
+    // === 層 4：極輕微的低頻「心跳」脈衝（每 2 拍，非常柔和）===
+    function playPulse(t) {
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(60, t);
+      osc.frequency.exponentialRampToValueAtTime(40, t + 0.3);
+      g.gain.setValueAtTime(0.25, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+      osc.connect(g);
+      g.connect(bgmMasterGain);
+      osc.start(t);
+      osc.stop(t + 0.4);
     }
 
     // === 排程循環 ===
-    const BPM = 52; // 慢速，緊張感
-    const beat = 60 / BPM; // ~1.154 秒/拍
-    let t = ctx.currentTime + 0.3;
+    const BPM = 48; // 更慢更放鬆
+    const beat = 60 / BPM;
+    let t = ctx.currentTime + 0.5;
     let barCount = 0;
 
     bgmLoopId = setInterval(() => {
       if (!bgmPlaying) { clearInterval(bgmLoopId); return; }
 
-      // 心跳：每兩拍一次
-      if (barCount % 2 === 0) playHeartbeat(t);
+      // 心跳脈衝：每 2 拍輕輕一下
+      if (barCount % 2 === 0) playPulse(t);
 
-      // 鬼音：每 6 拍一次，緩慢輪轉
-      if (barCount % 6 === 0) playEerie(t);
+      // 撥弦：隨機，密度適中
+      if (Math.random() < 0.32) playPluck(t + Math.random() * beat * 0.7);
 
-      // 撥弦：隨機出現，製造不確定感
-      if (Math.random() < 0.28) playPluck(t + Math.random() * beat * 0.8);
+      // 和聲墊：每 8 拍換一次
+      if (barCount % 8 === 0 && barCount > 0) playPadChord(t);
 
       t += beat;
       barCount++;
@@ -1585,7 +1976,7 @@ updateStats();
     if (isMuted) return;
     const ctx = getCtx();
     const master = ctx.createGain();
-    master.gain.setValueAtTime(0.45, ctx.currentTime);
+    master.gain.setValueAtTime(0.18, ctx.currentTime);
     master.connect(ctx.destination);
 
     const notes = [523.25, 659.25, 783.99, 1046.5];
@@ -1621,7 +2012,7 @@ updateStats();
     if (isMuted) return;
     const ctx = getCtx();
     const master = ctx.createGain();
-    master.gain.setValueAtTime(0.38, ctx.currentTime);
+    master.gain.setValueAtTime(0.15, ctx.currentTime);
     master.connect(ctx.destination);
 
     const notes = [330, 277.2, 220];
@@ -1652,6 +2043,21 @@ updateStats();
     buzz.stop(ctx.currentTime + 0.6);
   }
 
+  /* ---------- 設計理念 Modal ---------- */
+  const designBtn = document.getElementById('designBtn');
+  const designModal = document.getElementById('designModal');
+  const designModalClose = document.getElementById('designModalClose');
+
+  designBtn.addEventListener('click', () => {
+    designModal.classList.add('open');
+  });
+  designModalClose.addEventListener('click', () => {
+    designModal.classList.remove('open');
+  });
+  designModal.addEventListener('click', (e) => {
+    if (e.target === designModal) designModal.classList.remove('open');
+  });
+
   /* ---------- 音量切換 ---------- */
   volumeBtn.addEventListener('click', () => {
     isMuted = !isMuted;
@@ -1662,7 +2068,7 @@ updateStats();
     if (bgmMasterGain && audioCtx) {
       bgmMasterGain.gain.cancelScheduledValues(audioCtx.currentTime);
       bgmMasterGain.gain.linearRampToValueAtTime(
-        isMuted ? 0 : 0.18,
+        isMuted ? 0 : 0.42,
         audioCtx.currentTime + 0.3
       );
     }
